@@ -105,18 +105,16 @@ endfunction
 
 
 fun! xtabline#maps#menu() abort
-  let basic = [
-        \['<F5>', 'Cycle mode'],
-        \[']b',   'Next Buffer'],
-        \['[b',   'Prev Buffer'],
-        \]
-
   let cd = [
         \['cdw',  'Working directory'],
-        \['cd?',  'Directory info'],
+        \['cdi',  'Directory info'],
         \['cdl',  'Window-local directory'],
         \['cdc',  'Cd to current directory'],
         \]
+
+  if exists(':tcd') == 2
+    call insert(cd, ['cdt', 'Tab-local directory'], 1)
+  endif
 
   let leader = [
         \['\',    'Go to last tab'],
@@ -170,15 +168,12 @@ fun! xtabline#maps#menu() abort
         \['ts',   'Save tab'],
         \]
 
-  if exists(':tcd') == 2
-    call insert(cd, ['cdt', 'Tab-local directory'], 1)
-  endif
 
   let X = substitute(g:xtabline_settings.map_prefix, '<leader>', get(g:, 'mapleader', '\'), 'g')
   vnew +setlocal\ bt=nofile\ bh=wipe\ noswf\ nobl xtabline mappings
   80wincmd |
   let text = []
-  for group in [[basic, 'basic'], [cd, 'cd'], [leader, X], [manage, X.' tabs/buffer/session']]
+  for group in [[cd, 'cd'], [leader, X], [manage, X.' tabs/buffer/session']]
     let i = 1
     call add(text, "\n" . group[1] . " mappings:\n")
     for m in group[0]
