@@ -35,12 +35,9 @@ fun! s:base_mappings() abort
     endif
   endfun
 
-  call s:mapkey_('<F5>', 'Mode')
-  call s:mapkeyc(']b',   'NextBuffer')
-  call s:mapkeyc('[b',   'PrevBuffer')
   call s:mapkey0('cdc',  'CD')
   call s:mapkey_('cdw',  'WD')
-  call s:mapkey_('cd?',  'Info')
+  call s:mapkey_('cdi',  'Info')
   call s:mapkey_('cdl',  'LD')
 
   if exists(':tcd') == 2
@@ -89,8 +86,6 @@ fun! s:prefix_mappings() abort
   call s:mapkey_(X.'ss', 'SaveSession')
   call s:mapkey_(X.'sd', 'DeleteSession')
   call s:mapkey_(X.'sn', 'NewSession')
-
-  exe 'nnoremap' X '<Nop>'
 endfun
 
 
