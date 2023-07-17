@@ -35,6 +35,8 @@ fun! s:base_mappings() abort
     endif
   endfun
 
+  call s:mapkeyc(']b',   'NextBuffer')
+  call s:mapkeyc('[b',   'PrevBuffer')
   call s:mapkey0('cdc',  'CD')
   call s:mapkey_('cdw',  'WD')
   call s:mapkey_('cdi',  'Info')
@@ -105,13 +107,17 @@ endfunction
 
 
 fun! xtabline#maps#menu() abort
+  let basic = [
+        \[']b',   'Next Buffer'],
+        \['[b',   'Prev Buffer'],
+        \]
+
   let cd = [
         \['cdw',  'Working directory'],
         \['cdi',  'Directory info'],
         \['cdl',  'Window-local directory'],
         \['cdc',  'Cd to current directory'],
         \]
-
   if exists(':tcd') == 2
     call insert(cd, ['cdt', 'Tab-local directory'], 1)
   endif
@@ -173,7 +179,7 @@ fun! xtabline#maps#menu() abort
   vnew +setlocal\ bt=nofile\ bh=wipe\ noswf\ nobl xtabline mappings
   80wincmd |
   let text = []
-  for group in [[cd, 'cd'], [leader, X], [manage, X.' tabs/buffer/session']]
+  for group in [[basic, 'basic'], [cd, 'cd'], [leader, X], [manage, X.' tabs/buffer/session']]
     let i = 1
     call add(text, "\n" . group[1] . " mappings:\n")
     for m in group[0]
